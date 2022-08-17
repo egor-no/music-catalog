@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Catalog - albums</title>
+
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/ui-darkness/jquery-ui.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/site.css"/>
+</head>
+<body>
+<div class="container">
+    <div class="page-header">
+        <h1>Welcome to the album page</h1>
+    </div>
+    <div th:each="album: ${albums}">
+        <table class="table table-striped table-bordered" >
+            <tr>
+                <td th:text="${album.artist}">Artist</td>
+                <td th:text="${album.name}">Album Name</td>
+                <td th:text="${album.year}" width="15%">Year</td>
+            </tr>
+            <tr>
+                <td th:text="${album.info}" colspan="3">Album Info</td>
+            </tr>
+        </table>
+        <div class="container" style="margin-bottom: 50px;width:95%;">
+            <div class="row">
+                <div class="card-deck">
+                    <div th:each="format: ${album.items}" class="card col-md-3 col-sm-4 col-xs-6 text-center text-dark bg-info mb-3 border-dark mb-3" >
+                        <div class="card-header">
+                            <h4 class="card-title" th:text="${format.albumName}"></h4>
+                        </div>
+                        <div class="card-body">
+                            <img width="150" th:src="@{{imglink}(imglink=${format.img})}">
+                            <br><span th:text="${format.format}">Format</span> <span th:if="${format.notes} != null "> | </span> <span th:text="${format.notes}">Notes</span>
+                            <p th:text="${format.price}">Price</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+</div>
+</body>
+
+</html>
