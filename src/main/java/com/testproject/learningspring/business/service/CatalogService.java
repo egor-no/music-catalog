@@ -26,7 +26,6 @@ public class CatalogService {
 
     public List<CatalogItem> getCatalog(Long artistId, String label, Long albumId) {
         List<CatalogItem> catalog = new ArrayList<>();
-
         Iterable<Format> formats = null;
 
         if (label != null)
@@ -36,26 +35,29 @@ public class CatalogService {
         else
             formats = formatRepository.findAll();
 
-
-
         formats.forEach(format -> {
             Album parentAlbum = albumRepository.findById(format.getAlbumId()).get();
             if (artistId == null || artistId.equals(parentAlbum.getArtistID())) {
-                CatalogItem item = new CatalogItem();
-                item.setLabel(format.getLabel());
-                item.setNotes(format.getNotes());
-                item.setReleaseDate(format.getReleaseDate());
-                item.setPrice(format.getPrice());
-                item.setImg(format.getImg());
-                item.setFormat(format.getFormat());
-
-                item.setAlbumId(parentAlbum.getAlbumId());
-                item.setAlbumName(parentAlbum.getTitle());
-                item.setArtistId(parentAlbum.getArtistID());
-                item.setArtistName(artistRepository.findById(parentAlbum.getArtistID()).get().getName());
-                catalog.add(item);
+                catalog.add(makeItem(format, parentAlbum));
             }
         });
         return catalog;
+    }
+
+    private CatalogItem makeItem(Format format, Album parentAlbum) {
+        CatalogItem item = new CatalogItem();
+        item.setLabel(format.getLabel());
+        item.setNotes(format.getNotes());
+        item.setReleaseDate(format.getReleaseDate());
+        item.setPrice(format.getPrice());
+        item.setImg(format.getImg());
+        item.setFormat(format.getFormat());
+
+        item.setAlbumId(parentAlbum.getAlbumId());
+        item.setAlbumName(parentAlbum.getTitle());
+        item.setArtistId(parentAlbum.getArtistID());
+        item.setArtistName(artistRepository.findById(parentAlbum.getArtistID()).get().getName());
+
+        return item;
     }
 }

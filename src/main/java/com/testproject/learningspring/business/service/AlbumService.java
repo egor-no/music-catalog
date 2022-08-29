@@ -23,24 +23,26 @@ public class AlbumService {
     }
 
     public List<AlbumDAO> getAlbums(Long albumId) {
-        List<AlbumDAO> albums = new ArrayList<>();
+        List<AlbumDAO> target = new ArrayList<>();
         Iterable<Album> source;
         if (albumId != null)
             source = albumRepository.getAlbumsByAlbumId(albumId);
         else
             source = albumRepository.findAll();
         source.forEach(album -> {
-            AlbumDAO albumDAO = new AlbumDAO();
-            albumDAO.setArtist(artistRepository.findById(album.getArtistID()).get().getName());
-            albumDAO.setYear(album.getYear());
-            albumDAO.setInfo(album.getInfo());
-            albumDAO.setName(album.getTitle());
-            albumDAO.setAlbumId(album.getAlbumId());
-            albumDAO.setItems(catalogService.getCatalog(null, null, album.getAlbumId()));
-
-            albums.add(albumDAO);
+            target.add(makeDAO(album));
         });
+        return target;
+    }
 
-        return albums;
+    private AlbumDAO makeDAO(Album album) {
+        AlbumDAO albumDAO = new AlbumDAO();
+        albumDAO.setArtist(artistRepository.findById(album.getArtistID()).get().getName());
+        albumDAO.setYear(album.getYear());
+        albumDAO.setInfo(album.getInfo());
+        albumDAO.setName(album.getTitle());
+        albumDAO.setAlbumId(album.getAlbumId());
+        albumDAO.setItems(catalogService.getCatalog(null, null, album.getAlbumId()));
+        return albumDAO;
     }
 }

@@ -35,19 +35,24 @@ public class OrderService {
         Iterable<Order> allorders = this.orderRepository.findOrderByClientId(clientID);
         List<OrderDAO> orders = new ArrayList<>();
         allorders.forEach(order -> {
-            OrderDAO orderdomain = new OrderDAO();
-            Client client = clientRepository.findById(clientID).get();
-            orderdomain.setFirstName(client.getFirstName());
-            orderdomain.setLastName(client.getLastName());
-            orderdomain.setAddress(client.getAddress());
-            Map<Long, Integer> items = new HashMap<>();
-            Iterable<OrderItem> iterate = itemsRepository.findOrderItemsByOrderId(order.getOrderId());
-            iterate.forEach(item -> {
-                items.put(item.getFormatId(), item.getQuantity());
-            });
-            orderdomain.setItems(items);
-            orders.add(orderdomain);
+            orders.add(makeDAO(order,clientID));
         });
         return orders;
+    }
+
+    private OrderDAO makeDAO(Order order, Long clientID) {
+        OrderDAO orderdomain = new OrderDAO();
+        Client client = clientRepository.findById(clientID).get();
+        orderdomain.setFirstName(client.getFirstName());
+        orderdomain.setLastName(client.getLastName());
+        orderdomain.setAddress(client.getAddress());
+        Map<Long, Integer> items = new HashMap<>();
+        Iterable<OrderItem> iterate = itemsRepository.findOrderItemsByOrderId(order.getOrderId());
+        iterate.forEach(item -> {
+            items.put(item.getFormatId(), item.getQuantity());
+        });
+        orderdomain.setItems(items);
+
+        return orderdomain;
     }
 }

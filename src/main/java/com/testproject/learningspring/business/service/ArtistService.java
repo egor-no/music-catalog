@@ -33,13 +33,17 @@ public class ArtistService {
         } else
             source = artistRepository.findAll();
         source.forEach(artist -> {
-            ArtistDAO artistback = new ArtistDAO();
-            artistback.setBio(artist.getBio());
-            artistback.setCountry(artist.getCountry());
-            artistback.setName(artist.getName());
-            artists.add(artistback);
+            artists.add(makeDAO(artist));
         });
         return artists;
+    }
+
+    private ArtistDAO makeDAO (Artist artist) {
+        ArtistDAO artistDAO = new ArtistDAO();
+        artistDAO.setBio(artist.getBio());
+        artistDAO.setCountry(artist.getCountry());
+        artistDAO.setName(artist.getName());
+        return artistDAO;
     }
 
 }

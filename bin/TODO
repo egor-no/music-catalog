@@ -1,8 +1,0 @@
-1.Create ORDERSERVICE and server tier
-    to get all the items for this order (by order id)
-    to get all the order for this client (by client id)
-2. Web pages
-    main for all the albums
-    album page for each album
-    client page with client info and the list of orders
-    order page where all formats and client info are listed
